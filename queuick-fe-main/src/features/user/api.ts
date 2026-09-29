@@ -3,7 +3,7 @@ import { type AuthResponse, type LoginCredentials } from "./types";
 
 export const authApi = {
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
-    const response = await api.post<AuthResponse>("auth/login/", credentials);
+    const response = await api.post<AuthResponse>("auth/login", credentials);
     return response.data;
   },
 
