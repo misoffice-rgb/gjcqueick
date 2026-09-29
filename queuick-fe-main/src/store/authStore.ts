@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import type { User } from "@/features/user/types";
-import { authApi } from "@/features/user/api";
 import { useStaffWindowStore } from "./staffWindowStore";
 
 interface AuthState {
@@ -17,43 +16,41 @@ interface AuthState {
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
-      user: null,
-      loading: true,
-      isAuthenticated: false,
+      // ✅ Force the state to always be logged in as an admin for your live demo
+      user: {
+        id: 1,
+        username: "admin",
+        is_superuser: true,
+        role: "admin"
+      } as any,
+      loading: false,
+      isAuthenticated: true,
 
       setUser: (user) => set({ user, isAuthenticated: !!user }),
       setLoading: (loading) => set({ loading }),
 
+      // ✅ Disable the online validation check so refreshing doesn't kick you out
       checkAuth: async () => {
-        try {
-          set({ loading: true });
-          const response = await authApi.getCurrentUser();
-          if (response.success) {
-            set({ user: response.user, isAuthenticated: true });
-          } else {
-            set({ user: null, isAuthenticated: false });
-          }
-        } catch (error) {
-          console.error("Auth check failed:", error);
-          set({ user: null, isAuthenticated: false });
-        } finally {
-          set({ loading: false });
-        }
+        set({ 
+          loading: false, 
+          isAuthenticated: true, 
+          user: {
+            id: 1,
+            username: "admin",
+            is_superuser: true,
+            role: "admin"
+          } as any 
+        });
+        return Promise.resolve();
       },
 
       logout: async () => {
-        try {
-          await authApi.logout();
-        } catch (error) {
-          console.error("Logout failed:", error);
-        } finally {
-          localStorage.removeItem("ws_access_token");
-          localStorage.removeItem("auth-storage");
-          localStorage.removeItem("staff-window-storage");
-          useStaffWindowStore.getState().clearAll();
-          set({ user: null, isAuthenticated: false });
-          window.location.href = "/";
-        }
+        localStorage.removeItem("ws_access_token");
+        localStorage.removeItem("auth-storage");
+        localStorage.removeItem("staff-window-storage");
+        useStaffWindowStore.getState().clearAll();
+        set({ user: null, isAuthenticated: false });
+        window.location.href = "/";
       },
     }),
     {
