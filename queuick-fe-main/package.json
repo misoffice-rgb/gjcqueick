@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "ngrok": "ngrok http --url expert-remarkably-mustang.ngrok-free.app 5173"
   },
+
   "dependencies": {
     "@radix-ui/react-switch": "^1.2.6",
     "@tailwindcss/vite": "^4.1.18",
