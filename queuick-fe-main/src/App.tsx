@@ -31,29 +31,23 @@ const queryClient = new QueryClient({
   },
 });
 
-
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <Router>
           <Routes>
-            {/* Public routes */}
+            {/* Public and Open Demo Routes (Isolated from layouts) */}
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/dashboard" element={<Dashboard />} />
 
-            <Route
-              path="/tickets/:ticketId/status"
-              element={<TicketStatus />}
-            />
+            <Route path="/tickets/:ticketId/status" element={<TicketStatus />} />
             <Route path="/monitoring" element={<Monitoring />} />
-
-            {/* Unprotected Kiosk Demo */}
             <Route path="/kiosk" element={<TicketGeneration />} />
 
-            {/* OPEN ROUTES WITH SIDEBAR LAYOUT (Bypassed Protection for Demo) */}
+            {/* OPEN ROUTES WITH SIDEBAR LAYOUT (Dashboard removed from here to prevent crash) */}
             <Route element={<AuthLayout />}>
-              <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/admin/services" element={<AdminServicesPage />} />
               <Route
                 path="/admin/services/:serviceId/windows"
@@ -63,7 +57,7 @@ const App = () => {
               <Route path="/admin/settings" element={<AdminSettingsPage />} />
             </Route>
 
-            {/* OPEN ROUTES WITHOUT SIDEBAR LAYOUT (Bypassed Protection for Demo) */}
+            {/* OPEN ROUTES WITHOUT SIDEBAR LAYOUT */}
             <Route path="/staff/onboarding" element={<StaffOnboarding />} />
             <Route path="/queue-management" element={<QueueManagement />} />
 
