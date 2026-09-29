@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
-import ProtectedRoute from "./components/auth/ProtectedRoute";
 import AuthLayout from "./components/layout/AuthLayout";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -36,23 +35,11 @@ const App = () => {
             />
             <Route path="/monitoring" element={<Monitoring />} />
 
-            <Route
-              path="/kiosk"
-              element={
-                <ProtectedRoute allowedRoles={["admin"]}>
-                  <TicketGeneration />
-                </ProtectedRoute>
-              }
-            />
+            {/* Unprotected Kiosk Demo */}
+            <Route path="/kiosk" element={<TicketGeneration />} />
 
-            {/* Authenticated routes WITH sidebar layout (Admin only) */}
-            <Route
-              element={
-                <ProtectedRoute allowedRoles={["admin"]}>
-                  <AuthLayout />
-                </ProtectedRoute>
-              }
-            >
+            {/* OPEN ROUTES WITH SIDEBAR LAYOUT (Bypassed Protection for Demo) */}
+            <Route element={<AuthLayout />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/admin/services" element={<AdminServicesPage />} />
               <Route
@@ -63,31 +50,15 @@ const App = () => {
               <Route path="/admin/settings" element={<AdminSettingsPage />} />
             </Route>
 
-            {/* Authenticated routes WITHOUT sidebar layout (Staff only) */}
-            <Route
-              path="/staff/onboarding"
-              element={
-                <ProtectedRoute allowedRoles={["admin", "staff"]}>
-                  <StaffOnboarding />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/queue-management"
-              element={
-                <ProtectedRoute allowedRoles={["admin", "staff"]}>
-                  <QueueManagement />
-                </ProtectedRoute>
-              }
-            />
+            {/* OPEN ROUTES WITHOUT SIDEBAR LAYOUT (Bypassed Protection for Demo) */}
+            <Route path="/staff/onboarding" element={<StaffOnboarding />} />
+            <Route path="/queue-management" element={<QueueManagement />} />
 
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Toaster duration={3000} />
         </Router>
       </AuthProvider>
-
-      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>
   );
 };
