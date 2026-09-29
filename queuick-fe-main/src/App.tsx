@@ -17,7 +17,20 @@ import StaffOnboarding from "./pages/StaffOnboarding";
 import NotFound from "./pages/NotFound";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-const queryClient = new QueryClient();
+// ✅ Updated configuration to handle missing backend API data gracefully
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false, // Stop trying to fetch when server is absent
+      refetchOnWindowFocus: false,
+      throwOnError: false, // Prevent fatal dashboard crashes
+    },
+    mutations: {
+      throwOnError: false,
+    }
+  },
+});
+
 
 const App = () => {
   return (
